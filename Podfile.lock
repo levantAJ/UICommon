@@ -1,0 +1,20 @@
+PODS:
+  - Utils (0.0.1)
+
+DEPENDENCIES:
+  - Utils (from `https://github.com/levantAJ/Utils.git`, commit `cc3f2df8ccf017364695a8acd879dbf240f77b51`)
+
+EXTERNAL SOURCES:
+  Utils:
+    :commit: cc3f2df8ccf017364695a8acd879dbf240f77b51
+    :git: https://github.com/levantAJ/Utils.git
+
+CHECKOUT OPTIONS:
+  Utils:
+    :commit: cc3f2df8ccf017364695a8acd879dbf240f77b51
+    :git: https://github.com/levantAJ/Utils.git
+
+SPEC CHECKSUMS:
+  Utils: 96d7e321c54c1a51f5fa4d15543a811713eac345
+
+COCOAPODS: 0.39.0
