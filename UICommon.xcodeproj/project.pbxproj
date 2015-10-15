@@ -10,9 +10,9 @@
 		3D94C08B1BD0069900088691 /* UICommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D94C08A1BD0069900088691 /* UICommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D94C0921BD0069900088691 /* UICommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D94C0871BD0069900088691 /* UICommon.framework */; };
 		3D94C0971BD0069900088691 /* UICommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D94C0961BD0069900088691 /* UICommonTests.swift */; };
-		3D94C0A51BD006B800088691 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D94C0A11BD006B800088691 /* Constants.swift */; };
 		3D94C0DF1BD00DF500088691 /* MessageBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D94C0DD1BD00DF500088691 /* MessageBannerView.swift */; };
 		3D94C0E01BD00DF500088691 /* MessageBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D94C0DE1BD00DF500088691 /* MessageBannerView.xib */; };
+		3D94C0E21BD0149E00088691 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D94C0E11BD0149E00088691 /* Constants.swift */; };
 		C40E406E5F56398E6F1F32B4 /* Pods_UICommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA0F57BB13B7092B52ECBF37 /* Pods_UICommon.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,9 +33,9 @@
 		3D94C0911BD0069900088691 /* UICommonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UICommonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D94C0961BD0069900088691 /* UICommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICommonTests.swift; sourceTree = "<group>"; };
 		3D94C0981BD0069900088691 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D94C0A11BD006B800088691 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = "../../../Atlassian/Projects/ui-common-ios/UICommon/Constants.swift"; sourceTree = "<group>"; };
 		3D94C0DD1BD00DF500088691 /* MessageBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageBannerView.swift; sourceTree = "<group>"; };
 		3D94C0DE1BD00DF500088691 /* MessageBannerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageBannerView.xib; sourceTree = "<group>"; };
+		3D94C0E11BD0149E00088691 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CAA1BA8A731377BF6092311C /* Pods-UICommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UICommon.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UICommon/Pods-UICommon.debug.xcconfig"; sourceTree = "<group>"; };
 		D1450E657D25B4133F12DE9D /* Pods-UICommon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UICommon.release.xcconfig"; path = "Pods/Target Support Files/Pods-UICommon/Pods-UICommon.release.xcconfig"; sourceTree = "<group>"; };
 		DA0F57BB13B7092B52ECBF37 /* Pods_UICommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UICommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,10 +93,10 @@
 		3D94C0891BD0069900088691 /* UICommon */ = {
 			isa = PBXGroup;
 			children = (
-				3D94C0A11BD006B800088691 /* Constants.swift */,
 				3D94C0DC1BD00DF500088691 /* MessageBannerView */,
 				3D94C08A1BD0069900088691 /* UICommon.h */,
 				3D94C08C1BD0069900088691 /* Info.plist */,
+				3D94C0E11BD0149E00088691 /* Constants.swift */,
 			);
 			path = UICommon;
 			sourceTree = "<group>";
@@ -272,7 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D94C0DF1BD00DF500088691 /* MessageBannerView.swift in Sources */,
-				3D94C0A51BD006B800088691 /* Constants.swift in Sources */,
+				3D94C0E21BD0149E00088691 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
