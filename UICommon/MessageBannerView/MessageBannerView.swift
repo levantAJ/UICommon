@@ -46,18 +46,22 @@ public class MessageBannerView: UIView {
     
     public func showWithMessage(message: String?) {
         if let message = message {
-            messageLabel.text = message
-            messageLabelHeightConstraint.constant = message.sizeWithFont(messageLabel.font, forWidth: messageLabel.frame.width).height + Constants.MessageBannerView.Padding
-            if hidden {
-                hidden = false
-                UIView.animateWithDuration(Constants.MessageBannerView.Duration,
-                    animations: { () -> Void in
-                        self.wrapperViewTopConstraint.constant = 0
-                        self.layoutIfNeeded()
-                    }) { (finished) -> Void in
-                        self.hidden = false
+            dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
+                if let weakSelf = self {
+                    weakSelf.messageLabel.text = message
+                    weakSelf.messageLabelHeightConstraint.constant = message.sizeWithFont(weakSelf.messageLabel.font, forWidth: weakSelf.messageLabel.frame.width).height + Constants.MessageBannerView.Padding
+                    if weakSelf.hidden {
+                        weakSelf.hidden = false
+                        UIView.animateWithDuration(Constants.MessageBannerView.Duration,
+                            animations: { () -> Void in
+                                weakSelf.wrapperViewTopConstraint.constant = 0
+                                weakSelf.layoutIfNeeded()
+                            }) { (finished) -> Void in
+                                weakSelf.hidden = false
+                        }
+                    }
                 }
-            }
+                })
         } else {
             hide()
         }
@@ -65,13 +69,17 @@ public class MessageBannerView: UIView {
     
     public func hide() {
         if !hidden {
-            UIView.animateWithDuration(Constants.MessageBannerView.Duration,
-                animations: { () -> Void in
-                    self.wrapperViewTopConstraint.constant = -self.messageLabelHeightConstraint.constant
-                    self.layoutIfNeeded()
-                }) { (finished) -> Void in
-                    self.hidden = true
-            }
+            dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
+                if let weakSelf = self {
+                    UIView.animateWithDuration(Constants.MessageBannerView.Duration,
+                        animations: { () -> Void in
+                            weakSelf.wrapperViewTopConstraint.constant = -weakSelf.messageLabelHeightConstraint.constant
+                            weakSelf.layoutIfNeeded()
+                        }) { (finished) -> Void in
+                            weakSelf.hidden = true
+                    }
+                }
+                })
         }
     }
     
