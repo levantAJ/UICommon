@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Utils
 
 public class MessageBannerView: UIView {
     @IBOutlet weak var messageLabel: UILabel!
