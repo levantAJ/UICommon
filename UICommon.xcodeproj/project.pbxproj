@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D0CF2201BEDE3ED0097D494 /* NotificationMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0CF21F1BEDE3ED0097D494 /* NotificationMessageView.swift */; };
+		3D0CF2221BEDE40D0097D494 /* NotificationMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D0CF2211BEDE40D0097D494 /* NotificationMessageView.xib */; };
 		3D4B9E1D1BD234B9008CDFCC /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4B9E1C1BD234B9008CDFCC /* Utils.swift */; };
 		3D94C08B1BD0069900088691 /* UICommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D94C08A1BD0069900088691 /* UICommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D94C0921BD0069900088691 /* UICommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D94C0871BD0069900088691 /* UICommon.framework */; };
@@ -28,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D0CF21F1BEDE3ED0097D494 /* NotificationMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationMessageView.swift; sourceTree = "<group>"; };
+		3D0CF2211BEDE40D0097D494 /* NotificationMessageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationMessageView.xib; sourceTree = "<group>"; };
 		3D4B9E1C1BD234B9008CDFCC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		3D94C0871BD0069900088691 /* UICommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UICommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D94C08A1BD0069900088691 /* UICommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICommon.h; sourceTree = "<group>"; };
@@ -72,6 +76,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3D0CF21E1BEDE3D60097D494 /* NotificationMessageView */ = {
+			isa = PBXGroup;
+			children = (
+				3D0CF21F1BEDE3ED0097D494 /* NotificationMessageView.swift */,
+				3D0CF2211BEDE40D0097D494 /* NotificationMessageView.xib */,
+			);
+			path = NotificationMessageView;
+			sourceTree = "<group>";
+		};
 		3D94C07D1BD0069900088691 = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +108,7 @@
 		3D94C0891BD0069900088691 /* UICommon */ = {
 			isa = PBXGroup;
 			children = (
+				3D0CF21E1BEDE3D60097D494 /* NotificationMessageView */,
 				3D94C0DC1BD00DF500088691 /* MessageBannerView */,
 				3D94C08A1BD0069900088691 /* UICommon.h */,
 				3D4B9E1C1BD234B9008CDFCC /* Utils.swift */,
@@ -224,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D94C0E01BD00DF500088691 /* MessageBannerView.xib in Resources */,
+				3D0CF2221BEDE40D0097D494 /* NotificationMessageView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +292,7 @@
 				3D94C0E51BD01B4600088691 /* Constaints.swift in Sources */,
 				3D94C0DF1BD00DF500088691 /* MessageBannerView.swift in Sources */,
 				3D4B9E1D1BD234B9008CDFCC /* Utils.swift in Sources */,
+				3D0CF2201BEDE3ED0097D494 /* NotificationMessageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
