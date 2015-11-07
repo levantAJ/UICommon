@@ -9,6 +9,8 @@
 import UIKit
 import SDWebImage
 
+public typealias NotificationMessageViewEvent = (() -> Void)
+
 public class NotificationMessageView: UIView {
     @IBOutlet public weak var notificationImageView: UIImageView!
     @IBOutlet weak var notificationImageViewWidthConstraint: NSLayoutConstraint!
@@ -16,8 +18,10 @@ public class NotificationMessageView: UIView {
     @IBOutlet public weak var notificationTitleLabel: UILabel!
     @IBOutlet public weak var notificationMessageLabel: UILabel!
     
-    var willDismiss: (() -> Void)?
-    var didDismiss: (() -> Void)?
+    var willDismiss: NotificationMessageViewEvent?
+    var didDismiss: NotificationMessageViewEvent?
+    var willShow: NotificationMessageViewEvent?
+    var didShow: NotificationMessageViewEvent?
     
     public var iconSize = Constants.NotificationMessageView.DefaultIconSize {
         didSet {
@@ -26,7 +30,7 @@ public class NotificationMessageView: UIView {
                 self?.notificationImageViewWidthConstraint.constant = weakSelf.iconSize
                 self?.notificationImageViewHeightConstraint.constant = weakSelf.iconSize
                 self?.layoutIfNeeded()
-            })
+                })
         }
     }
     
@@ -58,6 +62,7 @@ public class NotificationMessageView: UIView {
         didSet {
             guard let title = title else { return }
             notificationTitleLabel.text = title
+            layoutIfNeeded()
         }
     }
     
@@ -65,6 +70,7 @@ public class NotificationMessageView: UIView {
         didSet {
             guard let message = message else { return }
             notificationMessageLabel.text = message
+            layoutIfNeeded()
         }
     }
     
@@ -84,24 +90,55 @@ public class NotificationMessageView: UIView {
     public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         guard let superview = superview else { return }
-        frame = CGRect(x: 0, y: 0, width: superview.frame.width, height: frame.height)
+        frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
         superview.bringSubviewToFront(self)
         hidden = true
     }
     
-    public func showWithTitle(title: String, message: String, iconURLString: String? = nil) {
-        guard let superview = superview else { return }
-        hidden = false
-        self.title = title
-        self.message = message
-        if let iconURLString = iconURLString {
-            self.iconURL = NSURL(string: iconURLString)
+    public func showWithTitle(title: String,
+        message: String,
+        iconURLString: String? = nil,
+        willShow: NotificationMessageViewEvent? = nil,
+        didShow: NotificationMessageViewEvent? = nil,
+        willDismiss: NotificationMessageViewEvent? = nil,
+        didDismiss: NotificationMessageViewEvent? = nil) {
+            guard let superview = superview else { return }
+            self.willShow = willShow
+            self.didShow = didShow
+            self.willDismiss = willDismiss
+            self.didDismiss = didDismiss
+            willShow?()
+            hidden = false
+            self.title = title
+            self.message = message
+            if let iconURLString = iconURLString {
+                self.iconURL = NSURL(string: iconURLString)
+            }
+            frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
+            superview.bringSubviewToFront(self)
+            UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
+                guard let weakSelf = self else { return }
+                self?.frame = CGRect(x: 0, y: 0, width: weakSelf.frame.width, height: weakSelf.frame.height)
+                self?.layoutIfNeeded()
+                }) { [weak self] (finished) -> Void in
+                    self?.didShow?()
+            }
+    }
+    
+    public func hide() {
+        willDismiss?()
+        UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
+            guard let weakSelf = self else { return }
+            self?.frame = CGRect(x: 0, y: -weakSelf.frame.height, width: weakSelf.frame.width, height: weakSelf.frame.height)
+            self?.layoutIfNeeded()
+            }) { [weak self] (finished) -> Void in
+                self?.didDismiss?()
+                self?.hidden = true
         }
-        superview.bringSubviewToFront(self)
     }
     
     public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+        hide()
     }
 }
 
