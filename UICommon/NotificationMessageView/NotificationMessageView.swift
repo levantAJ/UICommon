@@ -70,6 +70,12 @@ public class NotificationMessageView: UIView {
         }
         return notificationMessageView
     }
+    
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        guard let superview = superview else { return }
+        frame = CGRect(x: 0, y: 0, width: superview.frame.width, height: bounds.height)
+    }
 }
 
 extension Constants {
