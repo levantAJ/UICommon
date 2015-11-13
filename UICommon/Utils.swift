@@ -8,9 +8,7 @@
 
 import UIKit
 
-class Utils: NSObject {
-
-}
+class Utils: NSObject {}
 
 extension String {
     public func sizeWithFont(font: UIFont, forWidth width: CGFloat) -> CGSize {
