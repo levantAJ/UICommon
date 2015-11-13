@@ -17,11 +17,15 @@ public class NotificationMessageView: UIView {
     @IBOutlet weak var notificationImageViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet public weak var notificationTitleLabel: UILabel!
     @IBOutlet public weak var notificationMessageLabel: UILabel!
+    @IBOutlet public weak var notificationBottomLineView: UIView!
+    @IBOutlet public weak var notificationBottomLineViewHeightConstraint: NSLayoutConstraint!
     
     var willDismiss: NotificationMessageViewEvent?
     var didDismiss: NotificationMessageViewEvent?
     var willShow: NotificationMessageViewEvent?
     var didShow: NotificationMessageViewEvent?
+    var didSelect: NotificationMessageViewEvent?
+    var timer: NSTimer?
     
     public var iconSize = Constants.NotificationMessageView.DefaultIconSize {
         didSet {
@@ -58,6 +62,18 @@ public class NotificationMessageView: UIView {
         }
     }
     
+    public var iconCircle = true {
+        didSet {
+            if iconCircle {
+                notificationImageView.clipsToBounds = true
+                notificationImageView.layer.cornerRadius = notificationImageView.bounds.width/2
+            } else {
+                notificationImageView.clipsToBounds = false
+                notificationImageView.layer.cornerRadius = 0
+            }
+        }
+    }
+    
     public var title: String? {
         didSet {
             guard let title = title else { return }
@@ -74,9 +90,14 @@ public class NotificationMessageView: UIView {
         }
     }
     
+    public var timeToDismis = Constants.NotificationMessageView.DismissedSeconds
+    
     override public func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = Constants.NotificationMessageView.PrimaryBackgroundColor
+        backgroundColor = Constants.NotificationMessageView.SecondaryBackgroundColor
+        notificationBottomLineView.backgroundColor = Constants.NotificationMessageView.PrimaryBackgroundColor
+        notificationBottomLineViewHeightConstraint.constant = 0.5
+        iconCircle = true
     }
     
     public class func loadFromNib() -> NotificationMessageView? {
@@ -101,12 +122,14 @@ public class NotificationMessageView: UIView {
         willShow: NotificationMessageViewEvent? = nil,
         didShow: NotificationMessageViewEvent? = nil,
         willDismiss: NotificationMessageViewEvent? = nil,
-        didDismiss: NotificationMessageViewEvent? = nil) {
+        didDismiss: NotificationMessageViewEvent? = nil,
+        didSelect: NotificationMessageViewEvent? = nil) {
             guard let superview = superview else { return }
             self.willShow = willShow
             self.didShow = didShow
             self.willDismiss = willDismiss
             self.didDismiss = didDismiss
+            self.didSelect = didSelect
             willShow?()
             hidden = false
             self.title = title
@@ -123,9 +146,12 @@ public class NotificationMessageView: UIView {
                 }) { [weak self] (finished) -> Void in
                     self?.didShow?()
             }
+            timer = NSTimer.scheduledTimerWithTimeInterval(timeToDismis, target: self, selector: "hide", userInfo: nil, repeats: false)
     }
     
     public func hide() {
+        timer?.invalidate()
+        timer = nil
         willDismiss?()
         UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
             guard let weakSelf = self else { return }
@@ -139,6 +165,7 @@ public class NotificationMessageView: UIView {
     
     public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         hide()
+        didSelect?()
     }
 }
 
@@ -147,8 +174,9 @@ extension Constants {
         static let PrimaryBackgroundColor = UIColor(red: 0.855, green: 0.855, blue: 0.855, alpha: 1)
         
         static let SecondaryBackgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1)
-        static let DefaultIconSize = CGFloat(32)
+        static let DefaultIconSize = CGFloat(35)
         static let Identifier = "NotificationMessageView"
         static let DefaultDuration = 0.25
+        static let DismissedSeconds = 10.0 // seconds
     }
 }
