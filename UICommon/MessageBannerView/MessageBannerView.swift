@@ -40,8 +40,11 @@ public class MessageBannerView: UIView {
         }
     }
     
+    public var timeToDismis = Constants.MessageBannerView.DismissedSeconds
+    
     public var touchToClose = true
     var isShowing = false
+    var timer: NSTimer?
     
     override public func awakeFromNib() {
         super.awakeFromNib()
@@ -90,6 +93,7 @@ public class MessageBannerView: UIView {
                             weakSelf.isShowing = false
                     }
                 }
+                weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "hide", userInfo: nil, repeats: false)
                 })
         } else {
             hide()
@@ -105,6 +109,8 @@ public class MessageBannerView: UIView {
                 })
             } else {
                 dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
+                    self?.timer?.invalidate()
+                    self?.timer = nil
                     if let weakSelf = self {
                         UIView.animateWithDuration(Constants.MessageBannerView.Duration,
                             animations: { () -> Void in
@@ -148,5 +154,6 @@ extension Constants {
         static let Duration = 0.35
         static let Padding = CGFloat(16)
         static let Delay = Double(1)
+        static let DismissedSeconds = 3.0
     }
 }
