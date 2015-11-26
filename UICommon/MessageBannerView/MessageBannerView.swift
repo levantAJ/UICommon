@@ -93,7 +93,9 @@ public class MessageBannerView: UIView {
                             weakSelf.isShowing = false
                     }
                 }
-                weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "hide", userInfo: nil, repeats: false)
+                if messageBannerViewType != .Loading {
+                    weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "hide", userInfo: nil, repeats: false)
+                }
                 })
         } else {
             hide()
@@ -154,6 +156,6 @@ extension Constants {
         static let Duration = 0.35
         static let Padding = CGFloat(16)
         static let Delay = Double(1)
-        static let DismissedSeconds = 3.0
+        static let DismissedSeconds = 2.0
     }
 }
