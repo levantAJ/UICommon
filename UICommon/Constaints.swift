@@ -12,13 +12,11 @@ struct Constants {}
 
 extension Constants {
     struct Color {
-        static let GreenColor = UIColor(red: 0x3a/255, green: 0xaf/255, blue: 0x65/255, alpha: 1)
-        
-        static let YellowColor = UIColor(red: 0xea/255, green: 0xa9/255, blue: 0x3f/255, alpha: 1)
-        
-        static let RedColor = UIColor(red: 0xce/255, green: 0x3b/255, blue: 0x4f/255, alpha: 1)
-        
-        static let BlackColor = UIColor(red: 0x33/255, green: 0x33/255, blue: 0x33/255, alpha: 1)
+        static let BlueColor = UIColor(red: 0x34/255, green: 0x98/255, blue: 0xdb/255, alpha: 1)
+        static let GreenColor = UIColor(red: 0x2e/255, green: 0xcc/255, blue: 0x71/255, alpha: 1)
+        static let YellowColor = UIColor(red: 0xf1/255, green: 0xc4/255, blue: 0x0f/255, alpha: 1)
+        static let RedColor = UIColor(red: 0xe7/255, green: 0x4c/255, blue: 0x3c/255, alpha: 1)
+        static let BlackColor = UIColor(red: 0x34/255, green: 0x49/255, blue: 0x5e/255, alpha: 1)
     }
 }
 

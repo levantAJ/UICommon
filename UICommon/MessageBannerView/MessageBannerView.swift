@@ -21,7 +21,7 @@ public enum MessageBannerViewType {
         case .Loading:
             return Constants.Color.YellowColor
         case .Success:
-            return Constants.Color.GreenColor
+            return Constants.Color.BlueColor
         case .None:
             return Constants.Color.BlackColor
         }
