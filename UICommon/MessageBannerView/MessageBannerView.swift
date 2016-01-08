@@ -43,6 +43,7 @@ public class MessageBannerView: UIView {
     public var timeToDismis = Constants.MessageBannerView.DismissedSeconds
     
     public var touchToClose = true
+    public var autoHidden = true
     var isShowing = false
     var timer: NSTimer?
     
@@ -73,7 +74,7 @@ public class MessageBannerView: UIView {
         }
     }
     
-    public func showWithMessage(message: String?, messageBannerViewType: MessageBannerViewType = .None) {
+    public func showWithMessage(message: String?, messageBannerViewType: MessageBannerViewType = .None, completion: CompletionClosure? = nil) {
         if let message = message {
             dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
                 guard let weakSelf = self, superview = weakSelf.superview else { return }
@@ -91,9 +92,10 @@ public class MessageBannerView: UIView {
                         }) { (finished) -> Void in
                             weakSelf.hidden = false
                             weakSelf.isShowing = false
+                            completion?()
                     }
                 }
-                if messageBannerViewType != .Loading {
+                if messageBannerViewType != .Loading && weakSelf.autoHidden {
                     weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "hide", userInfo: nil, repeats: false)
                 }
                 })
@@ -102,7 +104,7 @@ public class MessageBannerView: UIView {
         }
     }
     
-    public func hide() {
+    public func hide(completion: CompletionClosure? = nil) {
         if !hidden {
             if isShowing {
                 isShowing = false
@@ -120,6 +122,7 @@ public class MessageBannerView: UIView {
                                 weakSelf.layoutIfNeeded()
                             }) { (finished) -> Void in
                                 weakSelf.hidden = true
+                                completion?()
                         }
                     }
                     })

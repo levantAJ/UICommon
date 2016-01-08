@@ -119,6 +119,9 @@ public class NotificationMessageView: UIView {
     public func showWithTitle(title: String,
         message: String,
         iconURLString: String? = nil,
+        icon: UIImage? = nil,
+        addCircleForIcon: Bool = true,
+        autoDismiss: Bool = true,
         willShow: NotificationMessageViewEvent? = nil,
         didShow: NotificationMessageViewEvent? = nil,
         willDismiss: NotificationMessageViewEvent? = nil,
@@ -134,8 +137,12 @@ public class NotificationMessageView: UIView {
             hidden = false
             self.title = title
             self.message = message
+            self.iconCircle = addCircleForIcon
             if let iconURLString = iconURLString {
                 self.iconURL = NSURL(string: iconURLString)
+            }
+            if let icon = icon {
+                self.notificationImageView.image = icon
             }
             frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
             superview.bringSubviewToFront(self)
@@ -146,7 +153,12 @@ public class NotificationMessageView: UIView {
                 }) { [weak self] (finished) -> Void in
                     self?.didShow?()
             }
-            timer = NSTimer.scheduledTimerWithTimeInterval(timeToDismis, target: self, selector: "hide", userInfo: nil, repeats: false)
+            if autoDismiss {
+                timer = NSTimer.scheduledTimerWithTimeInterval(timeToDismis, target: self, selector: "hide", userInfo: nil, repeats: false)
+            } else {
+                timer?.invalidate()
+                timer = nil
+            }
     }
     
     public func hide() {
