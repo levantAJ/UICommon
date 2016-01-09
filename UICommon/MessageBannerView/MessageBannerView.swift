@@ -96,12 +96,16 @@ public class MessageBannerView: UIView {
                     }
                 }
                 if messageBannerViewType != .Loading && weakSelf.autoHidden {
-                    weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "hide", userInfo: nil, repeats: false)
+                    weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "forcedHide", userInfo: nil, repeats: false)
                 }
                 })
         } else {
             hide()
         }
+    }
+    
+    public func forcedHide() {
+        hide()
     }
     
     public func hide(completion: CompletionClosure? = nil) {
