@@ -45,11 +45,11 @@ public class MessageBannerView: UIView {
     public var touchToClose = true
     public var autoHidden = true
     var isShowing = false
-    var timer: NSTimer?
+    var timer: Timer?
     
     override public func awakeFromNib() {
         super.awakeFromNib()
-        hidden = true
+        isHidden = true
         messageLabelHeightConstraint.constant = Constants.MessageBannerView.Height
         wrapperViewTopConstraint.constant = -messageLabelHeightConstraint.constant
     }
@@ -58,98 +58,96 @@ public class MessageBannerView: UIView {
         super.didMoveToSuperview()
         if let superview = superview {
             frame = CGRect(x: 0,
-                y: 0,
-                width: superview.frame.width,
-                height: messageLabelHeightConstraint.constant)
+                           y: 0,
+                           width: superview.frame.width,
+                           height: messageLabelHeightConstraint.constant)
         }
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if !hidden {
+        if !isHidden {
             frame = CGRect(x: frame.minX,
-                y: frame.minY,
-                width: frame.width,
-                height: messageLabelHeightConstraint.constant)
+                           y: frame.minY,
+                           width: frame.width,
+                           height: messageLabelHeightConstraint.constant)
         }
     }
     
     public func showWithMessage(message: String?, messageBannerViewType: MessageBannerViewType = .None, completion: CompletionClosure? = nil) {
         if let message = message {
-            dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
-                guard let weakSelf = self, superview = weakSelf.superview else { return }
-                superview.bringSubviewToFront(weakSelf)
-                weakSelf.messageBannerViewType = messageBannerViewType
-                weakSelf.messageLabel.text = message
-                weakSelf.messageLabelHeightConstraint.constant = message.sizeWithFont(weakSelf.messageLabel.font, forWidth: weakSelf.messageLabel.frame.width).height + Constants.MessageBannerView.Padding
-                if weakSelf.hidden {
-                    weakSelf.hidden = false
-                    weakSelf.isShowing = true
-                    UIView.animateWithDuration(Constants.MessageBannerView.Duration,
-                        animations: { () -> Void in
-                            weakSelf.wrapperViewTopConstraint.constant = 0
-                            weakSelf.layoutIfNeeded()
-                        }) { (finished) -> Void in
-                            weakSelf.hidden = false
-                            weakSelf.isShowing = false
-                            completion?()
+            DispatchQueue.main.async {
+                guard let superview = self.superview else { return }
+                superview.bringSubviewToFront(self)
+                self.messageBannerViewType = messageBannerViewType
+                self.messageLabel.text = message
+                self.messageLabelHeightConstraint.constant = message.sizeWithFont(font: self.messageLabel.font, forWidth: self.messageLabel.frame.width).height + Constants.MessageBannerView.Padding
+                if self.isHidden {
+                    self.isHidden = false
+                    self.isShowing = true
+                    UIView.animate(withDuration: Constants.MessageBannerView.Duration,
+                                   animations: { () -> Void in
+                                    self.wrapperViewTopConstraint.constant = 0
+                                    self.layoutIfNeeded()
+                    }) { (finished) -> Void in
+                        self.isHidden = false
+                        self.isShowing = false
+                        completion?()
                     }
                 }
-                if messageBannerViewType != .Loading && weakSelf.autoHidden {
-                    weakSelf.timer = NSTimer.scheduledTimerWithTimeInterval(weakSelf.timeToDismis, target: weakSelf, selector: "forcedHide", userInfo: nil, repeats: false)
+                if messageBannerViewType != .Loading && self.autoHidden {
+                    self.timer = Timer.scheduledTimer(timeInterval: self.timeToDismis, target: self, selector: #selector(self.forcedHide), userInfo: nil, repeats: false)
                 }
-                })
+            }
         } else {
             hide()
         }
     }
     
-    public func forcedHide() {
+    @objc public func forcedHide() {
         hide()
     }
     
     public func hide(completion: CompletionClosure? = nil) {
-        if !hidden {
+        if !isHidden {
             if isShowing {
                 isShowing = false
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(Constants.MessageBannerView.Delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.asyncAfter(deadline: .now() + Constants.MessageBannerView.Delay) {
                     self.hide()
-                })
+                }
             } else {
-                dispatch_async(dispatch_get_main_queue(), { [weak self] () -> Void in
-                    self?.timer?.invalidate()
-                    self?.timer = nil
-                    if let weakSelf = self {
-                        UIView.animateWithDuration(Constants.MessageBannerView.Duration,
-                            animations: { () -> Void in
-                                weakSelf.wrapperViewTopConstraint.constant = -weakSelf.messageLabelHeightConstraint.constant
-                                weakSelf.layoutIfNeeded()
-                            }) { (finished) -> Void in
-                                weakSelf.hidden = true
-                                completion?()
-                        }
+                DispatchQueue.main.async {
+                    self.timer?.invalidate()
+                    self.timer = nil
+                    UIView.animate(withDuration: Constants.MessageBannerView.Duration,
+                                   animations: { () -> Void in
+                                    self.wrapperViewTopConstraint.constant = -self.messageLabelHeightConstraint.constant
+                                    self.layoutIfNeeded()
+                    }) { (finished) -> Void in
+                        self.isHidden = true
+                        completion?()
                     }
-                    })
+                }
             }
         }
     }
     
     public func alwaysKeepOnTopOfScrollView(scrollView: UIScrollView) {
         frame = CGRect(x: 0,
-            y: scrollView.contentOffset.y,
-            width: frame.width,
-            height: messageLabelHeightConstraint.constant)
+                       y: scrollView.contentOffset.y,
+                       width: frame.width,
+                       height: messageLabelHeightConstraint.constant)
     }
     
     public class func loadFromNib() -> MessageBannerView? {
-        let classBundle = NSBundle(forClass: MessageBannerView.self)
-        if let messageBannerView = classBundle.loadNibNamed(Constants.MessageBannerView.Identifier, owner: nil, options: nil).first as? MessageBannerView {
+        let classBundle = Bundle(for: MessageBannerView.self)
+        if let messageBannerView = classBundle.loadNibNamed(Constants.MessageBannerView.Identifier, owner: nil, options: nil)?.first as? MessageBannerView {
             return messageBannerView
         }
         return nil
     }
     
-    public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if touchToClose {
             hide()
         }

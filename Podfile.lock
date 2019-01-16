@@ -1,27 +1,31 @@
 PODS:
-  - SDWebImage (3.7.3):
-    - SDWebImage/Core (= 3.7.3)
-  - SDWebImage/Core (3.7.3)
-  - Utils (0.0.1)
+  - SDWebImage (4.4.3):
+    - SDWebImage/Core (= 4.4.3)
+  - SDWebImage/Core (4.4.3)
+  - Utils (0.0.2)
 
 DEPENDENCIES:
-  - SDWebImage (from `https://github.com/rs/SDWebImage.git`, commit `5a5c65d7996c09931a3384e86a8b96ff8f4ac5e7`)
-  - Utils (from `../Utils`)
+  - SDWebImage (~> 4.0)
+  - "Utils (from `git@github.com:levantAJ/Utils.git`, branch `master`)"
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SDWebImage
 
 EXTERNAL SOURCES:
-  SDWebImage:
-    :commit: 5a5c65d7996c09931a3384e86a8b96ff8f4ac5e7
-    :git: https://github.com/rs/SDWebImage.git
   Utils:
-    :path: "../Utils"
+    :branch: master
+    :git: "git@github.com:levantAJ/Utils.git"
 
 CHECKOUT OPTIONS:
-  SDWebImage:
-    :commit: 5a5c65d7996c09931a3384e86a8b96ff8f4ac5e7
-    :git: https://github.com/rs/SDWebImage.git
+  Utils:
+    :commit: 522fd0f6cbe7b3b71dcea76e3a5813d14cc2cdff
+    :git: "git@github.com:levantAJ/Utils.git"
 
 SPEC CHECKSUMS:
-  SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
-  Utils: 088820dd340dc6a8afc3ba822253877b1b88d2ff
+  SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
+  Utils: e112c144c2b95a4a07e5fd68310c85a596d36302
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 0e50bb7a249262d075e43fbd97587a18e7e1ea0b
+
+COCOAPODS: 1.5.3

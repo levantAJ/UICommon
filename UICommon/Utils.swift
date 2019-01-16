@@ -14,9 +14,9 @@ extension String {
     public func sizeWithFont(font: UIFont, forWidth width: CGFloat) -> CGSize {
         let fString = self as NSString
         let maximumSize = CGSize(width: width, height: CGFloat(MAXFLOAT))
-        let rect = fString.boundingRectWithSize(maximumSize,
-            options: NSStringDrawingOptions.TruncatesLastVisibleLine.union(NSStringDrawingOptions.UsesLineFragmentOrigin),
-            attributes: [NSFontAttributeName: font],
+        let rect = fString.boundingRect(with: maximumSize,
+                                        options: NSStringDrawingOptions.truncatesLastVisibleLine.union(NSStringDrawingOptions.usesLineFragmentOrigin),
+                                        attributes: [NSAttributedString.Key.font: font],
             context: nil)
         return rect.size
     }

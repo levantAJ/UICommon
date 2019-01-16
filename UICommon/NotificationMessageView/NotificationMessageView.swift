@@ -25,16 +25,16 @@ public class NotificationMessageView: UIView {
     var willShow: NotificationMessageViewEvent?
     var didShow: NotificationMessageViewEvent?
     var didSelect: NotificationMessageViewEvent?
-    var timer: NSTimer?
+    var timer: Timer?
     
     public var iconSize = Constants.NotificationMessageView.DefaultIconSize {
         didSet {
-            UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
+            UIView.animate(withDuration: Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
                 guard let weakSelf = self else { return }
                 self?.notificationImageViewWidthConstraint.constant = weakSelf.iconSize
                 self?.notificationImageViewHeightConstraint.constant = weakSelf.iconSize
                 self?.layoutIfNeeded()
-                })
+            })
         }
     }
     
@@ -45,13 +45,13 @@ public class NotificationMessageView: UIView {
         }
     }
     
-    public var iconURL: NSURL? {
+    public var iconURL: URL? {
         didSet {
             guard let iconURL = iconURL else {
                 iconSize = 0
                 return
             }
-            notificationImageView.sd_setImageWithURL(iconURL) { [weak self] (image, _, _, _) -> Void in
+            notificationImageView?.sd_setImage(with: iconURL) { [weak self] (image, _, _, _) -> Void in
                 guard let image = image else {
                     self?.iconSize = 0
                     return
@@ -75,6 +75,7 @@ public class NotificationMessageView: UIView {
     }
     
     public var title: String? {
+
         didSet {
             guard let title = title else { return }
             notificationTitleLabel.text = title
@@ -101,8 +102,8 @@ public class NotificationMessageView: UIView {
     }
     
     public class func loadFromNib() -> NotificationMessageView? {
-        let classBundle = NSBundle(forClass: NotificationMessageView.self)
-        guard let notificationMessageView = classBundle.loadNibNamed(Constants.NotificationMessageView.Identifier, owner: nil, options: nil).first as? NotificationMessageView else {
+        let classBundle = Bundle(for: NotificationMessageView.self)
+        guard let notificationMessageView = classBundle.loadNibNamed(Constants.NotificationMessageView.Identifier, owner: nil, options: nil)?.first as? NotificationMessageView else {
             return nil
         }
         return notificationMessageView
@@ -113,69 +114,68 @@ public class NotificationMessageView: UIView {
         guard let superview = superview else { return }
         frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
         superview.bringSubviewToFront(self)
-        hidden = true
+        isHidden = true
     }
     
     public func showWithTitle(title: String,
-        message: String,
-        iconURLString: String? = nil,
-        icon: UIImage? = nil,
-        addCircleForIcon: Bool = true,
-        autoDismiss: Bool = true,
-        willShow: NotificationMessageViewEvent? = nil,
-        didShow: NotificationMessageViewEvent? = nil,
-        willDismiss: NotificationMessageViewEvent? = nil,
-        didDismiss: NotificationMessageViewEvent? = nil,
-        didSelect: NotificationMessageViewEvent? = nil) {
-            guard let superview = superview else { return }
-            self.willShow = willShow
-            self.didShow = didShow
-            self.willDismiss = willDismiss
-            self.didDismiss = didDismiss
-            self.didSelect = didSelect
-            willShow?()
-            hidden = false
-            self.title = title
-            self.message = message
-            self.iconCircle = addCircleForIcon
-            if let iconURLString = iconURLString {
-                self.iconURL = NSURL(string: iconURLString)
-            }
-            if let icon = icon {
-                self.notificationImageView.image = icon
-            }
-            frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
-            superview.bringSubviewToFront(self)
-            UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
-                guard let weakSelf = self else { return }
-                self?.frame = CGRect(x: 0, y: 0, width: weakSelf.frame.width, height: weakSelf.frame.height)
-                self?.layoutIfNeeded()
-                }) { [weak self] (finished) -> Void in
-                    self?.didShow?()
-            }
-            if autoDismiss {
-                timer = NSTimer.scheduledTimerWithTimeInterval(timeToDismis, target: self, selector: "hide", userInfo: nil, repeats: false)
-            } else {
-                timer?.invalidate()
-                timer = nil
-            }
-    }
-    
-    public func hide() {
-        timer?.invalidate()
-        timer = nil
-        willDismiss?()
-        UIView.animateWithDuration(Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
+                              message: String,
+                              iconURLString: String? = nil,
+                              icon: UIImage? = nil,
+                              addCircleForIcon: Bool = true,
+                              autoDismiss: Bool = true,
+                              willShow: NotificationMessageViewEvent? = nil,
+                              didShow: NotificationMessageViewEvent? = nil,
+                              willDismiss: NotificationMessageViewEvent? = nil,
+                              didDismiss: NotificationMessageViewEvent? = nil,
+                              didSelect: NotificationMessageViewEvent? = nil) {
+        guard let superview = superview else { return }
+        self.willShow = willShow
+        self.didShow = didShow
+        self.willDismiss = willDismiss
+        self.didDismiss = didDismiss
+        self.didSelect = didSelect
+        willShow?()
+        isHidden = false
+        self.title = title
+        self.message = message
+        self.iconCircle = addCircleForIcon
+        if let iconURLString = iconURLString {
+            self.iconURL = URL(string: iconURLString)
+        }
+        if let icon = icon {
+            self.notificationImageView.image = icon
+        }
+        frame = CGRect(x: 0, y: -frame.height, width: superview.frame.width, height: frame.height)
+        superview.bringSubviewToFront(self)
+        UIView.animate(withDuration: Constants.NotificationMessageView.DefaultDuration, animations: { [weak self] () -> Void in
             guard let weakSelf = self else { return }
-            self?.frame = CGRect(x: 0, y: -weakSelf.frame.height, width: weakSelf.frame.width, height: weakSelf.frame.height)
+            self?.frame = CGRect(x: 0, y: 0, width: weakSelf.frame.width, height: weakSelf.frame.height)
             self?.layoutIfNeeded()
-            }) { [weak self] (finished) -> Void in
-                self?.didDismiss?()
-                self?.hidden = true
+        }) { [weak self] (finished) -> Void in
+            self?.didShow?()
+        }
+        if autoDismiss {
+            timer = Timer.scheduledTimer(timeInterval: timeToDismis, target: self, selector: #selector(hide), userInfo: nil, repeats: false)
+        } else {
+            timer?.invalidate()
+            timer = nil
         }
     }
     
-    public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    @objc public func hide() {
+        timer?.invalidate()
+        timer = nil
+        willDismiss?()
+        UIView.animate(withDuration: Constants.NotificationMessageView.DefaultDuration, animations: {
+            self.frame = CGRect(x: 0, y: -self.frame.height, width: self.frame.width, height: self.frame.height)
+            self.layoutIfNeeded()
+        }) { (finished) -> Void in
+            self.didDismiss?()
+            self.isHidden = true
+        }
+    }
+    
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         hide()
         didSelect?()
     }
