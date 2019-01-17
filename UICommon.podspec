@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
   s.platform = :ios
   s.ios.deployment_target = '8.0'
   s.requires_arc = true
-  s.dependency = 'SDWebImage', '~> 4.0'
+  s.dependency 'SDWebImage', '~> 4.0'
   
 end
